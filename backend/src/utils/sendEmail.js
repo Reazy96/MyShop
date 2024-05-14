@@ -10,6 +10,8 @@ const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET;
 const REDIRECT_URI = process.env.GMAIL_REDIRECT_URI;
 const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN; // OAUTH2 Refresh token
 
+console.log(REFRESH_TOKEN);
+console.log(REDIRECT_URI);
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });

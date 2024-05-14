@@ -23,19 +23,23 @@ export async function registerUser({ firstname, lastname, email, password }) {
     sixDigitCode,
   });
 
-  await sendEmailVerification(user);
+  const successMail = await sendEmailVerification(user);
+
+  if (!successMail) {
+    await Users.findByIdAndDelete(user._id);
+    throw new Error("Could not send email");
+  }
 
   return userToView(user);
 }
 
 async function sendEmailVerification(user) {
-  try {
-    await sendEmail({
-      to: user.email,
-      subject: "Welcome to Todo.io",
-      text: `Hi ${user.firstname},welcome to MyShop ! 🤝  Please enter below the six digit verification code to verify your account. ${user.sixDigitCode} See you on the other side :) - Reazy from Todo.io`,
-    });
-  } catch (error) {
-    throw new Error("Failed to send email: " + error.message);
-  }
+  const result = await sendEmail({
+    to: user.email,
+    subject: "Welcome to Todo.io",
+    text: `Hi ${user.firstname},welcome to MyShop ! 🤝  Please enter below the six digit verification code to verify your account.
+       ${user.sixDigitCode} See you on the other side :) - Reazy from Todo.io`,
+  });
+  console.log(result);
+  return result;
 }
